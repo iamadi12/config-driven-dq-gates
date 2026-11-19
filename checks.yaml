@@ -1,0 +1,26 @@
+# Data quality rules for a monthly prescriber (HCP) sales feed.
+# severity: critical -> blocks the write, warning -> reported only
+min_row_count: 1
+
+checks:
+  - name: hcp_id_not_null
+    check: not_null
+    column: hcp_id
+    severity: critical
+
+  - name: hcp_month_unique
+    check: unique
+    columns: [hcp_id, month]
+    severity: critical
+
+  - name: trx_non_negative
+    check: in_range
+    column: trx
+    min: 0
+    severity: critical
+
+  - name: specialty_known
+    check: accepted_values
+    column: specialty
+    values: [ONC, CARD, NEURO, PCP]
+    severity: warning
